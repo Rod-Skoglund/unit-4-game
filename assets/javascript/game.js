@@ -6,6 +6,7 @@
 // *************************************************
 
 // Declare Variables
+var newGame = false;
 var randomTarget;
 var blueGemValue;
 var redGemValue;
@@ -40,7 +41,7 @@ function debugScript() {
     console.log("*****************************");
 }
 
-$(document).ready(function() {    
+$(document).ready(function() {
 
     //initialize target and gem values
     function initializeRandomValues() {
@@ -57,15 +58,25 @@ $(document).ready(function() {
                 i--;
             }
         }
-    }
+        console.log("In initializeRandomValues");
+        console.log("randomTarget = " + randomTarget);
+        console.log("crystalValueArray[0] (blue) = " + crystalValueArray[0]);
+        console.log("crystalValueArray[1] (red) = " + crystalValueArray[1]);
+        console.log("crystalValueArray[2] (green) = " + crystalValueArray[2]);
+        console.log("crystalValueArray[3] (yellow) = " + crystalValueArray[3]);
+        console.log("**********************************************************");
+
+    }    
+
+    
 
     //Get initial random values
     initializeRandomValues();
-    console.log("randomTarget = " + randomTarget);
-    console.log("crystalValueArray[0] = " + crystalValueArray[0]);
-    console.log("crystalValueArray[1] = " + crystalValueArray[1]);
-    console.log("crystalValueArray[2] = " + crystalValueArray[2]);
-    console.log("crystalValueArray[3] = " + crystalValueArray[3]);
+    // console.log("randomTarget = " + randomTarget);
+    // console.log("crystalValueArray[0] = " + crystalValueArray[0]);
+    // console.log("crystalValueArray[1] = " + crystalValueArray[1]);
+    // console.log("crystalValueArray[2] = " + crystalValueArray[2]);
+    // console.log("crystalValueArray[3] = " + crystalValueArray[3]);
 
     //initialize Target Display
     var TargetDiv = $(".empty-div-target");
@@ -105,6 +116,11 @@ $(document).ready(function() {
     newScoreDiv.text(currentUserScore);
     userScoreDiv.append(newScoreDiv);
     userScoreDiv.attr("class", "score");
+
+    // gameStatus = $("<p>");
+    // gameStatus.addClass("gameStatusDisplay");
+    // gameStatus.text("select gem to start");
+    // userScoreDiv.append(gameStatus);
     
     //initialize gemstones display
     for (var k = 0; k < crystalsArr.length; k++) {
@@ -112,7 +128,7 @@ $(document).ready(function() {
         gemImage.addClass("gemstones-img");
         gemImage.attr("gemColor", crystalsArr[k]);
         gemImage.attr("src", gemImgArr[k]);
-        console.log("gemImage.attr('gemColor') = " + gemImage.attr("gemColor"));
+        // console.log("gemImage.attr('gemColor') = " + gemImage.attr("gemColor"));
         $(".empty-gemstones").append(gemImage);
     }
 
@@ -122,64 +138,100 @@ $(document).ready(function() {
         newWinCountSpan.text(currentWinCount);
         newLossCountSpan.text(currentLossesCount);
         newScoreDiv.text(currentUserScore);
-        console.log("currentUserScore = " + currentUserScore);
+        // console.log("Update Display currentUserScore = " + currentUserScore);
         // if (userState) {
         //     alert("Congrats, You Win. Press OK to start a new game.");
         // }
         // else {
         //     alert("Sorry, You lose. Press OK to start a new game.");
         // }
-    }    
+    }
+
+    // function displayWinOrLoss (userWon) {
+    //     if (userWon) {
+    //         alert("Congrats, You Win. Press OK to start a new game.");
+    //     }
+    //     else {
+    //         alert("Sorry, You lose. Press OK to start a new game.");
+    //     }
+    // }
+
+    // function addSecs(d, s) {return new Date(d.valueOf()+s*1000);}
+    // function wasteTime(){
+    //     start = new Date();
+    //     end = addSecs(start,5);
+    //     do {start = new Date();} while (end-start > 0);
+    // }
 
     //Process gem selection event
 
     //on gem click
     $(".gemstones-img").on("click", function() {
-        var GemColorSelected = $(this).attr("gemColor");
-        console.log("gem selectted = " + GemColorSelected);
-        
-        //add specific gem value to user score
-        currentUserScore += crystalValueArray[crystalsArr.indexOf(GemColorSelected)];
-        console.log("currentUserScore = " + currentUserScore);
-
-        //update user score display
-        newScoreDiv.text(currentUserScore);
-
-        if (currentUserScore >= randomTarget) {
-            if (currentUserScore === randomTarget) {
-                currentWinCount++;
-                updateDisplay();
-                updateDisplay();
-                updateDisplay();
-                updateDisplay();
-                console.log("before alert currentUserScore = " + currentUserScore);
-                console.log("before alert currentUserScore = " + currentUserScore);
-                console.log("before alert currentUserScore = " + currentUserScore);
-                // newScoreDiv.text(currentUserScore);
-                alert("Congrats, You Win. Press OK to start a new game.");
-            }
-            else {
-                currentLossesCount++;
-                console.log("before alert currentUserScore = " + currentUserScore);
-                updateDisplay();
-                updateDisplay();
-                updateDisplay();
-                updateDisplay();
-                console.log("before alert currentUserScore = " + currentUserScore);
-                console.log("before alert currentUserScore = " + currentUserScore);
-                console.log("before alert currentUserScore = " + currentUserScore);
-                // newScoreDiv.text(currentUserScore);
-                alert("Sorry, You lose. Press OK to start a new game.");               
-            }
-            
+        if (newGame) {
+            //Ignore reset gem selection and reset game
+            newGame = false;
+            // currentUserScore = 0;
             initializeRandomValues();
-            console.log("randomTarget = " + randomTarget);
-            console.log("crystalValueArray[0] = " + crystalValueArray[0]);
-            console.log("crystalValueArray[1] = " + crystalValueArray[1]);
-            console.log("crystalValueArray[2] = " + crystalValueArray[2]);
-            console.log("crystalValueArray[3] = " + crystalValueArray[3]);
-            // updateDisplay();
+            updateDisplay();
+        }
+        else {
+            //process gem selection
+            var GemColorSelected = $(this).attr("gemColor");
+            console.log("gem selectted = " + GemColorSelected);
+            // gameStatus.text("keep playing");
+        
+            //add specific gem value to user score
+            currentUserScore += crystalValueArray[crystalsArr.indexOf(GemColorSelected)];
+            console.log("currentUserScore = " + currentUserScore);
 
+            //update user score display
+            newScoreDiv.text(currentUserScore);
+            var userWinOrLose = false;
+            var userWon;
+
+            if (currentUserScore >= randomTarget) {
+                if (currentUserScore === randomTarget) {
+                    currentWinCount++;
+                    // newScoreDiv.text(currentUserScore);
+                    // wasteTime();
+                    console.log("before alert currentUserScore = " + currentUserScore);
+                    // gameStatus.text("Congrats, You Win. Press OK to start a new game.");
+                    alert("Congrats, You Win. Select a Gem to start a new game.");
+                    // displayWinOrLoss(true);
+                    // updateDisplay();
+                    // userWinOrLose = true;
+                    // userWon = true;
+                    newGame = true;
+                }
+                else {
+                    currentLossesCount++;
+                    console.log("before alert currentUserScore = " + currentUserScore);
+                    // newScoreDiv.text(currentUserScore);
+                    // gameStatus.text("Sorry, You lose. Press OK to start a new game.");
+                    // wasteTime();
+                    alert("Sorry, You lose. Select a Gem to start a new game.");               
+                    // displayWinOrLoss(false);
+                    // updateDisplay();
+                    // userWinOrLose = true;
+                    // userWon = false;
+                    newGame = true;
+                }
+                
+                // initializeRandomValues();
+                // console.log("randomTarget = " + randomTarget);
+                // console.log("crystalValueArray[0] (blue) = " + crystalValueArray[0]);
+                // console.log("crystalValueArray[1] (red) = " + crystalValueArray[1]);
+                // console.log("crystalValueArray[2] (green) = " + crystalValueArray[2]);
+                // console.log("crystalValueArray[3] (yellow) = " + crystalValueArray[3]);
+                // console.log("**********************************************************");
+
+                // if (userWinOrLose) {
+                //     displayWinOrLoss(userWon)
+                // }
+
+                updateDisplay();
+
+            }
         }
 
     })
