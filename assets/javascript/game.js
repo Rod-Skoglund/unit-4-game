@@ -89,7 +89,6 @@ $(document).ready(function() {
         gemImage.attr("src", gemImgArr[k]);
         // console.log("gemImage.attr('gemColor') = " + gemImage.attr("gemColor"));
         $(".empty-gemstones").append(gemImage);
-        gemImage.text(crystalValueArray[k]);
     }
 
     //initialize restart button and add it to gemstone display - then hide it
@@ -123,14 +122,26 @@ $(document).ready(function() {
             if (currentUserScore >= randomTarget) {
                 if (currentUserScore === randomTarget) {
                     currentWinCount++;
-                    alert("Congrats, You Win. \nUse the New Game Button to start a new game.");
+                    alert("Congrats, You Win. \n"+
+                    "Use the New Game Button to start a new game. \n\n" +
+                    "The values assigned to the gems are as follows: \n"+
+                    "Blue = " + crystalValueArray[0] + "\n" +
+                    "Red = " + crystalValueArray[1] + "\n" +
+                    "Green = " + crystalValueArray[2] + "\n" +
+                    "Yellow = " + crystalValueArray[3] + "\n");
                     newGame = true;
                     //show the restart button
                     restartBtn.show();
                 }
                 else {
                     currentLossesCount++;
-                    alert("Sorry, You lose. \nUse the New Game Button to start a new game.");               
+                    alert("Sorry, You lose. \n"+
+                    "Use the New Game Button to start a new game. \n\n"+
+                    "The values assigned to the gems are as follows: \n"+
+                    "Blue = " + crystalValueArray[0] + "\n" +
+                    "Red = " + crystalValueArray[1] + "\n" +
+                    "Green = " + crystalValueArray[2] + "\n" +
+                    "Yellow = " + crystalValueArray[3] + "\n");               
                     newGame = true;
                     //show the restart button
                     restartBtn.show();
