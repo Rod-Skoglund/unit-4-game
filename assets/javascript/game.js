@@ -89,6 +89,7 @@ $(document).ready(function() {
         gemImage.attr("src", gemImgArr[k]);
         // console.log("gemImage.attr('gemColor') = " + gemImage.attr("gemColor"));
         $(".empty-gemstones").append(gemImage);
+        gemImage.text(crystalValueArray[k]);
     }
 
     //initialize restart button and add it to gemstone display - then hide it
